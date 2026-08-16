@@ -1,0 +1,15 @@
+config/database.php
+
+# OS / editor junk
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Dependency dirs (in case composer/npm gets added later)
+vendor/
+node_modules/
