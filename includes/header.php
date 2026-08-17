@@ -17,7 +17,7 @@ $openShift = getOpenShift();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title><?= h($pageTitle ?? 'Tapsi Stock') ?> — Tapsi Business</title>
+    <title><?= h($pageTitle ?? 'Tapsi ni Melay') ?> — Tapsi ni Melay</title>
     <link rel="stylesheet" href="<?= h($assetPath) ?>/css/style.css">
 </head>
 <body>
@@ -31,7 +31,7 @@ $openShift = getOpenShift();
                 <span class="logo-placeholder" aria-hidden="true">TS</span>
             </span>
             <span class="title-area">
-                <span class="brand-name">Tapsi Stock</span>
+                <span class="brand-name">Tapsi ni Melay</span>
                 <span class="brand-sub"><?= h($pageSubtitle ?? 'Stock tracking for the business.') ?></span>
             </span>
         </a>
