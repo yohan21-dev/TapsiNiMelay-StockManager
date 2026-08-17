@@ -7,13 +7,26 @@ login accounts, an admin panel, and usage reports.
 ## What's included
 
 - **Login system** — admin and staff accounts, passwords hashed with bcrypt.
+- **Shifts** (`shift.php`) — one shared shift for the whole crew at a time. Staff start a
+  shift before they can record stock or kitchen counts, and end it when done. Every stock
+  change and kitchen tally is tagged with the shift it happened in.
 - **Dashboard** (`dashboard.php`) — the +/- stock counter for every active item, saved live to MySQL.
-- **Reports** (`reports.php`) — daily/weekly usage totals per item, with a date range picker.
+- **Kitchen Count** (`kitchen_count.php`) — the digital version of the paper tally sheet:
+  tap + / − per dish, split into **Dine In** and **Takeout/Delivery**, for the open shift.
+  Kitchen items can optionally be linked to stock ("uses 2 Eggs, 1 Rice") so tallying an
+  order automatically deducts the right ingredients — or just leave a dish unlinked and
+  it'll only log counts.
+- **Reports** (`reports.php`) — daily/weekly usage totals per item with a date range picker,
+  plus a **By shift** panel to pull up exactly what moved (stock + kitchen counts) during
+  any specific shift.
 - **Admin panel**
-  - `admin/items.php` — add, edit, and retire items (name, category, unit, low-stock alert level).
+  - `admin/items.php` — add, edit, and retire stock items (name, category, unit, low-stock alert level).
+  - `admin/kitchen_items.php` — add, edit, and retire the dishes staff tally in Kitchen
+    Count, and link the stock each one uses (optional).
   - `admin/users.php` — add staff/admin accounts, reset passwords, enable/disable accounts.
-- Every stock change is logged in `stock_logs` (who did it, when, and the resulting stock level) —
-  this is what powers the reports and gives you a full audit trail.
+- Every stock change is logged in `stock_logs` (who did it, when, which shift, and the
+  resulting stock level) — this is what powers the reports and gives you a full audit trail.
+  Every kitchen tally is logged the same way in `kitchen_count_logs`.
 
 ## Requirements
 
@@ -55,7 +68,8 @@ to public only if you're fine with the code (not the data) being visible to anyo
 2. Start **Apache** and **MySQL** in the XAMPP Control Panel.
 3. Open **phpMyAdmin** (`http://localhost/phpmyadmin`), click **Import**, and import
    `database/schema.sql`. This creates the `tapsi_stock` database, all tables, a default
-   admin account, and a few starter categories.
+   admin account, a few starter categories, and a starter set of Kitchen Count items
+   based on a typical dine-in/takeout menu (edit or retire these freely afterward).
 4. If your MySQL has a root password (most XAMPP installs don't by default), open
    `config/database.php` and set `DB_PASS` accordingly.
 5. Visit `http://localhost/tapsi-stock/` in your browser.
@@ -77,14 +91,33 @@ to public only if you're fine with the code (not the data) being visible to anyo
    (or a subfolder if you want it at a sub-path).
 5. Visit your domain and log in as above, then change the admin password.
 
+## Upgrading an existing install
+
+If you already have Tapsi Stock running and just pulled this update, your database is
+missing the new `shifts` and `kitchen_count_*` tables. Run the migration once:
+
+```bash
+mysql -u root -p tapsi_stock < database/migration_shifts_kitchen.sql
+```
+
+(or paste its contents into phpMyAdmin's SQL tab with your database selected). This adds
+the new tables, tags `stock_logs` with a `shift_id` column, and seeds some starter Kitchen
+Count items — it does not touch your existing items, users, or stock history.
+
 ## Day-to-day use
 
-- **Staff** log in and only see the Stock and Reports pages — they tap + / − to record
-  every tray, container, or ingredient used or restocked. Nothing needs to be written down.
-- **Admins** additionally see Items (to add new things to track and set low-stock alerts)
-  and Users (to add staff accounts or disable someone who leaves).
+- **Staff** log in, **start a shift** (Shift page — pick a name like "Morning" or leave it
+  blank), then tap + / − on the **Stock** page to record trays, containers, or ingredients
+  used or restocked, and tally orders on the **Kitchen Count** page as they go out (Dine In
+  or Takeout/Delivery). Nothing needs to be written down. Stock and Kitchen Count are both
+  locked until a shift is open — the header always shows whether one is.
+- **Admins** additionally see Items and Kitchen Items (to add new things to track, set
+  low-stock alerts, and optionally link a dish to the stock it uses) and Users (to add
+  staff accounts or disable someone who leaves).
 - The **Reports** page shows how much of each item was used per day or week over any
-  date range — useful for reordering decisions and spotting waste.
+  date range, plus a **By shift** panel to pull up exactly what happened during any past
+  or currently open shift — useful for reordering decisions, spotting waste, and closing
+  out a shift's numbers.
 
 ## Notes on how stock changes are recorded
 
@@ -93,6 +126,13 @@ to public only if you're fine with the code (not the data) being visible to anyo
   Stock is never allowed to go below 0.
 - Items are never hard-deleted from the database — "Retire" just hides them from the
   dashboard while keeping their full history intact for reports.
+
+## Logo
+
+- The site logo lives at `assets/img/logo.jpg` and is shown in the header (and on the
+  login page). To swap it out, just replace that file with your own image — square
+  images work best. If the file is ever missing, the header falls back to a plain
+  text wordmark instead of breaking.
 
 ## Security notes
 

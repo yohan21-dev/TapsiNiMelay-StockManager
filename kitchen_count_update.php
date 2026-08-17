@@ -28,28 +28,14 @@ if (!$shift) {
     exit;
 }
 
-$itemId = filter_input(INPUT_POST, 'item_id', FILTER_VALIDATE_INT);
+$kitchenItemId = filter_input(INPUT_POST, 'kitchen_item_id', FILTER_VALIDATE_INT);
+$orderType = $_POST['order_type'] ?? '';
 $amount = filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_INT);
 
-if (!$itemId || !in_array($amount, [1, -1], true)) {
-    echo json_encode(['success' => false, 'error' => 'Invalid item or amount.']);
+if (!$kitchenItemId || !in_array($orderType, ['dine_in', 'takeout'], true) || !in_array($amount, [1, -1], true)) {
+    echo json_encode(['success' => false, 'error' => 'Invalid item, order type, or amount.']);
     exit;
 }
 
-$result = applyStockChange($itemId, (int)currentUser()['id'], $amount, '', (int)$shift['id']);
-
-if (!$result['success']) {
-    echo json_encode($result);
-    exit;
-}
-
-$db = getDB();
-$stmt = $db->prepare('SELECT low_stock_threshold FROM items WHERE id = ?');
-$stmt->execute([$itemId]);
-$threshold = (int)($stmt->fetchColumn() ?: 0);
-
-echo json_encode([
-    'success'   => true,
-    'new_stock' => $result['new_stock'],
-    'threshold' => $threshold,
-]);
+$result = applyKitchenCount((int)$shift['id'], $kitchenItemId, $orderType, (int)currentUser()['id'], $amount);
+echo json_encode($result);

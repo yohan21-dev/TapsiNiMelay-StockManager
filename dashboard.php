@@ -2,14 +2,21 @@
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/functions.php';
 requireLogin();
+requireOpenShift();
 
 $pageTitle = 'Stock';
 $pageSubtitle = 'Tap + when stock arrives, tap − when it\'s used. Every tap is saved automatically.';
 $activeNav = 'dashboard';
+$shift = getOpenShift();
 $items = getActiveItems();
 
 include __DIR__ . '/includes/header.php';
 ?>
+
+<a class="shift-bar" href="shift.php">
+    <span class="shift-dot on"></span>
+    <?= h(shiftDisplayLabel($shift)) ?> is open — changes are saved to this shift.
+</a>
 
 <?php if (empty($items)): ?>
     <div class="empty">

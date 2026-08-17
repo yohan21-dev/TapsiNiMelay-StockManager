@@ -34,7 +34,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
 <div class="login-wrap">
     <div class="login-card">
-        <h1>🍽️ Tapsi Stock</h1>
+        <span class="logo-mark logo-mark-lg">
+            <img src="assets/img/logo.jpg" alt="Tapsi Ni Melay logo"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <span class="logo-placeholder" aria-hidden="true">TS</span>
+        </span>
+        <h1>Tapsi Stock</h1>
         <p class="sub">Sign in to manage your business stock</p>
 
         <?php if ($error): ?>

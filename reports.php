@@ -35,6 +35,19 @@ $endDate = $today->format('Y-m-d');
 $totals = getUsageTotals($startDate, $endDate);
 $breakdown = getUsageReport($startDate, $endDate, $groupBy === 'week' ? 'week' : 'day');
 
+// Shift report: lets a report "indicate the start of a specific shift" —
+// pick a shift and see exactly what moved during it.
+$shifts = getShiftHistory(50);
+$shiftIdParam = filter_input(INPUT_GET, 'shift', FILTER_VALIDATE_INT);
+$selectedShift = null;
+if ($shiftIdParam) {
+    $selectedShift = getShift($shiftIdParam);
+} elseif (!empty($shifts)) {
+    $selectedShift = getOpenShift() ?: $shifts[0];
+}
+$shiftStockTotals = $selectedShift ? getUsageTotalsByShift((int) $selectedShift['id']) : [];
+$shiftKitchenTotals = $selectedShift ? getKitchenReportForShift((int) $selectedShift['id']) : [];
+
 // Pivot the breakdown into: periods (columns) x items (rows) for a readable table
 $periods = [];
 $pivot = []; // pivot[item_name][period] = used
@@ -47,6 +60,76 @@ rsort($periods);
 
 include __DIR__ . '/includes/header.php';
 ?>
+
+<div class="panel">
+    <h2>By shift</h2>
+    <?php if (empty($shifts)): ?>
+        <p style="color:var(--muted)">No shifts recorded yet — start one from the <a href="shift.php">Shift</a> page.</p>
+    <?php else: ?>
+        <form method="get" class="field" style="max-width:400px; margin-bottom:16px;">
+            <label for="shift">Choose a shift</label>
+            <select name="shift" id="shift" onchange="this.form.submit()">
+                <?php foreach ($shifts as $s): ?>
+                    <option value="<?= (int) $s['id'] ?>" <?= ($selectedShift && (int) $selectedShift['id'] === (int) $s['id']) ? 'selected' : '' ?>>
+                        <?= h(shiftDisplayLabel($s)) ?> — <?= h(date('M j, g:i A', strtotime($s['opened_at']))) ?><?= $s['closed_at'] ? '' : ' (open)' ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </form>
+
+        <?php if ($selectedShift): ?>
+            <p class="shift-meta" style="margin-top:-6px;">
+                Opened by <?= h($selectedShift['opened_by_name']) ?>
+                <?php if ($selectedShift['closed_at']): ?>
+                    · closed by <?= h($selectedShift['closed_by_name']) ?> at <?= h(date('M j, g:i A', strtotime($selectedShift['closed_at']))) ?>
+                <?php else: ?>
+                    · still open
+                <?php endif; ?>
+            </p>
+
+            <h3 style="font-size:14px; margin:18px 0 10px;">Stock moved</h3>
+            <?php if (empty($shiftStockTotals)): ?>
+                <p style="color:var(--muted)">No stock changes recorded this shift.</p>
+            <?php else: ?>
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead><tr><th>Item</th><th>Used</th><th>Added</th></tr></thead>
+                        <tbody>
+                            <?php foreach ($shiftStockTotals as $t): ?>
+                                <tr>
+                                    <td><?= h($t['name']) ?></td>
+                                    <td><?= (int) $t['total_used'] ?> <?= h($t['unit']) ?></td>
+                                    <td><?= (int) $t['total_added'] ?> <?= h($t['unit']) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+
+            <h3 style="font-size:14px; margin:18px 0 10px;">Kitchen counts</h3>
+            <?php if (empty($shiftKitchenTotals)): ?>
+                <p style="color:var(--muted)">No kitchen counts recorded this shift.</p>
+            <?php else: ?>
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead><tr><th>Item</th><th>Dine In</th><th>Takeout/Del</th><th>Total</th></tr></thead>
+                        <tbody>
+                            <?php foreach ($shiftKitchenTotals as $k): ?>
+                                <tr>
+                                    <td><?= h($k['name']) ?></td>
+                                    <td><?= (int) $k['dine_in_count'] ?></td>
+                                    <td><?= (int) $k['takeout_count'] ?></td>
+                                    <td><?= (int) $k['dine_in_count'] + (int) $k['takeout_count'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+        <?php endif; ?>
+    <?php endif; ?>
+</div>
 
 <form method="get" class="panel">
     <div class="actions-row" style="margin-bottom:0;">

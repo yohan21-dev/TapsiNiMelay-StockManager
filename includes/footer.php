@@ -1,4 +1,4 @@
-    <footer class="footer">Tapsi ni Melay</footer>
+    <footer class="footer">Tapsi Business — Stock Management System</footer>
 </main>
 
 <script>
@@ -8,7 +8,6 @@
 
         function applyTheme(theme) {
             document.body.classList.toggle('dark', theme === 'dark');
-            if (themeButton) themeButton.textContent = theme === 'dark' ? '☀️' : '🌙';
         }
 
         applyTheme(localStorage.getItem(THEME_KEY) || 'light');
@@ -17,7 +16,6 @@
             themeButton.addEventListener('click', function () {
                 const isDark = document.body.classList.toggle('dark');
                 localStorage.setItem(THEME_KEY, isDark ? 'dark' : 'light');
-                themeButton.textContent = isDark ? '☀️' : '🌙';
             });
         }
     })();
