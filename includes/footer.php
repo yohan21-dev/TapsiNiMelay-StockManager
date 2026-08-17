@@ -1,4 +1,4 @@
-    <footer class="footer">Tapsi ni Melay — Stock Management System</footer>
+    <footer class="footer">Tapsi ni Melay</footer>
 </main>
 
 <script>

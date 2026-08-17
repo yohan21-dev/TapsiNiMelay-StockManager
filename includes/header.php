@@ -59,7 +59,7 @@ function navCurrent(string $nav, string $activeNav): string
     <meta name="theme-color" content="#ffffff">
 
     <title>
-        <?= h($pageTitle ?? 'Tapsi Stock') ?> — Tapsi Business
+        <?= h($pageTitle ?? 'Tapsi Stock') ?> — Tapsi ni Melay
     </title>
 
     <link
@@ -105,7 +105,7 @@ function navCurrent(string $nav, string $activeNav): string
 
             <span class="title-area">
                 <span class="brand-name">
-                    Tapsi ni Melay Stocks Manager
+                    Tapsi ni Melay
                 </span>
 
                 <span class="brand-sub">
