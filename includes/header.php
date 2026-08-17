@@ -105,7 +105,7 @@ function navCurrent(string $nav, string $activeNav): string
 
             <span class="title-area">
                 <span class="brand-name">
-                    Tapsi ni Melay
+                    Tapsi ni Melay Stocks Manager
                 </span>
 
                 <span class="brand-sub">
