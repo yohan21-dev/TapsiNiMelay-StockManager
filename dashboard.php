@@ -2,21 +2,22 @@
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/functions.php';
 requireLogin();
-requireOpenShift();
 
 $pageTitle = 'Stock';
 $pageSubtitle = 'Tap + when stock arrives, tap − when it\'s used. Every tap is saved automatically.';
 $activeNav = 'dashboard';
-$shift = getOpenShift();
 $items = getActiveItems();
+
+// Distinct category names present in the active items, for the category tab bar
+$categoryNames = [];
+foreach ($items as $item) {
+    $categoryNames[$item['category_name'] ?? 'Uncategorized'] = true;
+}
+$categoryNames = array_keys($categoryNames);
+sort($categoryNames);
 
 include __DIR__ . '/includes/header.php';
 ?>
-
-<a class="shift-bar" href="shift.php">
-    <span class="shift-dot on"></span>
-    <?= h(shiftDisplayLabel($shift)) ?> is open — changes are saved to this shift.
-</a>
 
 <?php if (empty($items)): ?>
     <div class="empty">
@@ -33,10 +34,33 @@ include __DIR__ . '/includes/header.php';
         </p>
     </div>
 <?php else: ?>
+
+    <!-- Search -->
+    <div class="search-bar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m21 21-4.3-4.3"></path></svg>
+        <input type="search" id="itemSearch" placeholder="Search items..." aria-label="Search items">
+        <button type="button" class="clear-search" id="clearSearch" aria-label="Clear search">✕</button>
+    </div>
+
+    <!-- Category filter -->
+    <?php if (count($categoryNames) > 1): ?>
+        <div class="category-tabs" id="categoryTabs">
+            <button type="button" class="cat-tab active" data-category="all">All</button>
+            <?php foreach ($categoryNames as $catName): ?>
+                <button type="button" class="cat-tab" data-category="<?= h($catName) ?>"><?= h($catName) ?></button>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
     <section class="counter-list" id="counterList">
         <?php foreach ($items as $item): ?>
             <?php $isLow = (int)$item['current_stock'] <= (int)$item['low_stock_threshold']; ?>
-            <article class="counter-card<?= $isLow ? ' low-stock' : '' ?>" data-item-id="<?= (int)$item['id'] ?>">
+            <article
+                class="counter-card<?= $isLow ? ' low-stock' : '' ?>"
+                data-item-id="<?= (int)$item['id'] ?>"
+                data-name="<?= h(mb_strtolower($item['name'])) ?>"
+                data-category="<?= h($item['category_name'] ?? 'Uncategorized') ?>"
+            >
                 <div class="counter-top">
                     <div>
                         <div class="counter-name">
@@ -60,6 +84,9 @@ include __DIR__ . '/includes/header.php';
             </article>
         <?php endforeach; ?>
     </section>
+
+    <div class="no-results" id="noResults">No items match your search.</div>
+
 <?php endif; ?>
 
 <script>
@@ -113,6 +140,55 @@ document.getElementById('counterList')?.addEventListener('click', async (event) 
         card.querySelectorAll('.count-button').forEach(b => b.disabled = false);
     }
 });
+
+// --- Search + category filtering ---------------------------------
+(function () {
+    const searchInput = document.getElementById('itemSearch');
+    const clearButton = document.getElementById('clearSearch');
+    const categoryTabs = document.getElementById('categoryTabs');
+    const noResults = document.getElementById('noResults');
+    const cards = Array.from(document.querySelectorAll('.counter-card'));
+
+    if (!cards.length) return;
+
+    let activeCategory = 'all';
+
+    function applyFilters() {
+        const query = (searchInput?.value || '').trim().toLowerCase();
+        if (clearButton) clearButton.style.display = query ? 'flex' : 'none';
+
+        let visibleCount = 0;
+        cards.forEach(card => {
+            const matchesSearch = !query || card.dataset.name.includes(query);
+            const matchesCategory = activeCategory === 'all' || card.dataset.category === activeCategory;
+            const show = matchesSearch && matchesCategory;
+            card.style.display = show ? '' : 'none';
+            if (show) visibleCount++;
+        });
+
+        if (noResults) noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+
+    searchInput?.addEventListener('input', applyFilters);
+
+    clearButton?.addEventListener('click', () => {
+        if (!searchInput) return;
+        searchInput.value = '';
+        searchInput.focus();
+        applyFilters();
+    });
+
+    categoryTabs?.addEventListener('click', (event) => {
+        const btn = event.target.closest('.cat-tab');
+        if (!btn) return;
+        categoryTabs.querySelectorAll('.cat-tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeCategory = btn.dataset.category;
+        applyFilters();
+    });
+
+    applyFilters();
+})();
 </script>
 
 <?php if (isAdmin()): ?>
