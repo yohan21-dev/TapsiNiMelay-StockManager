@@ -628,3 +628,487 @@ table.data-table {
     .count { font-size: 28px; }
     .data-table th, .data-table td { padding: 9px 8px; font-size: 13px; }
 }
+
+/* =========================================================
+   KITCHEN COUNT
+========================================================= */
+
+.kitchen-page {
+    width: 100%;
+}
+
+/* Shift bar */
+
+.kitchen-shift-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    width: 100%;
+    margin-bottom: 20px;
+    padding: 13px 16px;
+
+    color: #374151;
+    text-decoration: none;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.kitchen-shift-bar:hover {
+    border-color: #d1d5db;
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+}
+
+.kitchen-shift-dot {
+    width: 9px;
+    height: 9px;
+    flex-shrink: 0;
+
+    border-radius: 50%;
+    background: #22c55e;
+
+    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+}
+
+/* Kitchen item list */
+
+.kc-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+}
+
+/* Item card */
+
+.kc-card {
+    position: relative;
+
+    padding: 20px;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
+
+    transition:
+        transform 0.15s ease,
+        box-shadow 0.2s ease,
+        border-color 0.2s ease;
+}
+
+.kc-card:hover {
+    border-color: #dbe2ea;
+    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07);
+}
+
+/* Item heading */
+
+.kc-top {
+    min-width: 0;
+    margin-bottom: 18px;
+}
+
+.kc-name {
+    color: #111827;
+
+    font-size: 18px;
+    line-height: 1.3;
+    font-weight: 750;
+
+    word-break: break-word;
+}
+
+.kc-recipe {
+    margin-top: 6px;
+
+    color: #9ca3af;
+
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+/* Order type groups */
+
+.kc-groups {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.kc-group {
+    min-width: 0;
+
+    padding: 14px;
+
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+}
+
+.kc-group-label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #6b7280;
+
+    font-size: 11px;
+    font-weight: 750;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+}
+
+/* Counter controls */
+
+.kc-controls {
+    display: grid;
+    grid-template-columns: 42px minmax(42px, 1fr) 42px;
+    align-items: center;
+    gap: 6px;
+}
+
+.count-button {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+    border-radius: 11px;
+
+    font-size: 22px;
+    font-weight: 500;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.08s ease,
+        background 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.count-button:active {
+    transform: scale(0.92);
+}
+
+.count-button:disabled {
+    cursor: wait;
+    opacity: 0.45;
+}
+
+.minus-button {
+    color: #374151;
+    background: #e5e7eb;
+}
+
+.minus-button:hover {
+    background: #d1d5db;
+}
+
+.plus-button {
+    color: #ffffff;
+    background: #2563eb;
+}
+
+.plus-button:hover {
+    background: #1d4ed8;
+}
+
+.count {
+    min-width: 42px;
+
+    text-align: center;
+
+    color: #111827;
+
+    font-size: 24px;
+    line-height: 1;
+    font-weight: 800;
+}
+
+/* Total orders */
+
+.kc-total {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-top: 14px;
+    padding-top: 13px;
+
+    border-top: 1px solid #f0f1f3;
+}
+
+.kc-total-label {
+    color: #9ca3af;
+
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.kc-total-value {
+    color: #374151;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+/* Saving state */
+
+.kc-card.is-saving {
+    border-color: #bfdbfe;
+}
+
+.kc-card.is-saving::after {
+    content: "Saving...";
+
+    position: absolute;
+    top: 12px;
+    right: 14px;
+
+    padding: 4px 8px;
+
+    color: #1d4ed8;
+    background: #eff6ff;
+
+    border-radius: 6px;
+
+    font-size: 10px;
+    font-weight: 700;
+}
+
+/* Empty state */
+
+.kitchen-empty {
+    padding: 50px 24px;
+
+    text-align: center;
+
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 18px;
+
+    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
+}
+
+.kitchen-empty-icon {
+    width: 70px;
+    height: 70px;
+
+    margin: 0 auto 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #2563eb;
+    background: #eff6ff;
+
+    border-radius: 18px;
+}
+
+.kitchen-empty h2 {
+    margin: 0 0 7px;
+
+    color: #111827;
+
+    font-size: 19px;
+}
+
+.kitchen-empty p {
+    max-width: 450px;
+    margin: 0 auto;
+
+    color: #6b7280;
+
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.kitchen-empty a {
+    color: #2563eb;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.kitchen-empty a:hover {
+    text-decoration: underline;
+}
+
+/* Toast notification */
+
+.kc-toast {
+    position: fixed;
+    z-index: 9999;
+
+    left: 50%;
+    bottom: 24px;
+
+    transform: translate(-50%, 20px);
+
+    padding: 11px 16px;
+
+    color: #ffffff;
+    background: #111827;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    opacity: 0;
+    pointer-events: none;
+
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.20);
+
+    transition:
+        opacity 0.2s ease,
+        transform 0.2s ease;
+}
+
+.kc-toast.show {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.kc-toast.error {
+    background: #dc2626;
+}
+
+/* =========================================================
+   TABLET
+========================================================= */
+
+@media (max-width: 850px) {
+
+    .kc-list {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 560px) {
+
+    .kitchen-shift-bar {
+        margin-bottom: 14px;
+        padding: 12px 14px;
+
+        font-size: 12px;
+    }
+
+    .kc-list {
+        gap: 12px;
+    }
+
+    .kc-card {
+        padding: 16px;
+        border-radius: 16px;
+    }
+
+    .kc-name {
+        font-size: 17px;
+    }
+
+    .kc-groups {
+        gap: 8px;
+    }
+
+    .kc-group {
+        padding: 11px 9px;
+        border-radius: 12px;
+    }
+
+    .kc-group-label {
+        margin-bottom: 8px;
+
+        font-size: 10px;
+        text-align: center;
+    }
+
+    .kc-controls {
+        grid-template-columns: 38px minmax(35px, 1fr) 38px;
+        gap: 4px;
+    }
+
+    .count-button {
+        width: 38px;
+        height: 42px;
+
+        border-radius: 10px;
+
+        font-size: 21px;
+    }
+
+    .count {
+        min-width: 35px;
+        font-size: 22px;
+    }
+
+    .kc-total {
+        margin-top: 11px;
+        padding-top: 10px;
+    }
+
+    .kc-total-label {
+        font-size: 10px;
+    }
+
+    .kc-total-value {
+        font-size: 13px;
+    }
+
+    .kitchen-empty {
+        padding: 40px 20px;
+    }
+}
+
+/* =========================================================
+   VERY SMALL PHONES
+========================================================= */
+
+@media (max-width: 360px) {
+
+    .kc-card {
+        padding: 14px;
+    }
+
+    .kc-groups {
+        grid-template-columns: 1fr;
+    }
+
+    .kc-group {
+        padding: 10px;
+    }
+
+    .kc-group-label {
+        text-align: left;
+    }
+
+    .kc-controls {
+        grid-template-columns: 42px 1fr 42px;
+    }
+
+    .count-button {
+        width: 42px;
+    }
+}
