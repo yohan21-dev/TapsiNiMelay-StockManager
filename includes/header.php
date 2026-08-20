@@ -69,6 +69,8 @@ function navCurrent(string $nav, string $activeNav): string
         rel="stylesheet"
         href="<?= h($assetPath) ?>/css/style.css?v=<?= $styleVersion ?>"
     >
+
+    <link rel="icon" type="image/x-icon" href="/assets/favicons/tnm-circle-logo.ico">
 </head>
 
 <body>

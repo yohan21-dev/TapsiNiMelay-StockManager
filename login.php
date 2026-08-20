@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($username === '' || $password === '') {
         $error = 'Please enter both username and password.';
     } elseif (attemptLogin($username, $password)) {
-        header('Location: dashboard.php');
+        header('Location: kitchen_count.php');
         exit;
     } else {
         $error = 'Incorrect username or password.';
@@ -29,7 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-    <title>Login — Tapsi Stock</title>
+    <title>Login — Tapsi ni Melay</title>
+    <link rel="icon" type="image/x-icon" href="assets/favicons/tnm-circle-logo.ico">
 
     <link rel="stylesheet" href="assets/css/style.css">
 
@@ -441,8 +442,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
 
         <div class="login-heading">
-            <h1>Welcome back</h1>
-            <p>Sign in to manage your Tapsi Stock inventory.</p>
+            <h1>Welcome ka-Tapsi!</h1>
+            <p>Sign in to manage your Tapsi ni Melay inventory.</p>
         </div>
 
         <?php if ($error): ?>
