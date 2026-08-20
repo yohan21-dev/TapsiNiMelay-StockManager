@@ -87,26 +87,6 @@ include __DIR__ . '/includes/header.php';
                 <?php endif; ?>
             </p>
 
-            <h3 style="font-size:14px; margin:18px 0 10px;">Stock moved</h3>
-            <?php if (empty($shiftStockTotals)): ?>
-                <p style="color:var(--muted)">No stock changes recorded this shift.</p>
-            <?php else: ?>
-                <div class="table-scroll">
-                    <table class="data-table">
-                        <thead><tr><th>Item</th><th>Used</th><th>Added</th></tr></thead>
-                        <tbody>
-                            <?php foreach ($shiftStockTotals as $t): ?>
-                                <tr>
-                                    <td><?= h($t['name']) ?></td>
-                                    <td><?= (int) $t['total_used'] ?> <?= h($t['unit']) ?></td>
-                                    <td><?= (int) $t['total_added'] ?> <?= h($t['unit']) ?></td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
-            <?php endif; ?>
-
             <h3 style="font-size:14px; margin:18px 0 10px;">Kitchen counts</h3>
             <?php if (empty($shiftKitchenTotals)): ?>
                 <p style="color:var(--muted)">No kitchen counts recorded this shift.</p>
@@ -121,6 +101,26 @@ include __DIR__ . '/includes/header.php';
                                     <td><?= (int) $k['dine_in_count'] ?></td>
                                     <td><?= (int) $k['takeout_count'] ?></td>
                                     <td><?= (int) $k['dine_in_count'] + (int) $k['takeout_count'] ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            <?php endif; ?>
+
+            <h3 style="font-size:14px; margin:18px 0 10px;">Stock moved</h3>
+            <?php if (empty($shiftStockTotals)): ?>
+                <p style="color:var(--muted)">No stock changes recorded this shift.</p>
+            <?php else: ?>
+                <div class="table-scroll">
+                    <table class="data-table">
+                        <thead><tr><th>Item</th><th>Used</th><th>Added</th></tr></thead>
+                        <tbody>
+                            <?php foreach ($shiftStockTotals as $t): ?>
+                                <tr>
+                                    <td><?= h($t['name']) ?></td>
+                                    <td><?= (int) $t['total_used'] ?> <?= h($t['unit']) ?></td>
+                                    <td><?= (int) $t['total_added'] ?> <?= h($t['unit']) ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

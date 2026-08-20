@@ -21,6 +21,9 @@ $isAdminPage = isset($inAdmin);
 $assetPath = $isAdminPage ? '../assets' : 'assets';
 $homeHref  = $isAdminPage ? '../dashboard.php' : 'dashboard.php';
 
+$styleFile = dirname(__DIR__) . '/assets/css/style.css';
+$styleVersion = file_exists($styleFile) ? filemtime($styleFile) : time();
+
 /**
  * Generate navigation URL depending on whether
  * the current page is inside /admin/.
@@ -64,7 +67,7 @@ function navCurrent(string $nav, string $activeNav): string
 
     <link
         rel="stylesheet"
-        href="<?= h($assetPath) ?>/css/style.css"
+        href="<?= h($assetPath) ?>/css/style.css?v=<?= $styleVersion ?>"
     >
 </head>
 

@@ -633,6 +633,24 @@ table.data-table {
    KITCHEN COUNT
 ========================================================= */
 
+.item-avatar {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: var(--primary-soft);
+    color: var(--primary);
+
+    font-size: 15px;
+    font-weight: 800;
+}
+
 .kitchen-page {
     width: 100%;
 }
@@ -645,29 +663,28 @@ table.data-table {
     gap: 10px;
 
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 14px;
     padding: 13px 16px;
 
-    color: #374151;
+    color: var(--text);
     text-decoration: none;
 
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 14px;
 
     font-size: 13px;
     font-weight: 600;
 
-    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+    box-shadow: var(--shadow-card);
 
-    transition:
-        border-color 0.2s ease,
-        box-shadow 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .kitchen-shift-bar:hover {
-    border-color: #d1d5db;
-    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    border-color: var(--primary);
+    box-shadow: var(--shadow-pop);
+    text-decoration: none;
 }
 
 .kitchen-shift-dot {
@@ -676,12 +693,16 @@ table.data-table {
     flex-shrink: 0;
 
     border-radius: 50%;
-    background: #22c55e;
+    background: var(--success);
 
-    box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.12);
+    box-shadow: 0 0 0 4px rgba(22, 197, 94, 0.15);
 }
 
-/* Kitchen item list */
+/* Search */
+
+.kc-search-wrap { margin-bottom: 16px; }
+
+/* Item list */
 
 .kc-list {
     display: grid;
@@ -693,48 +714,44 @@ table.data-table {
 
 .kc-card {
     position: relative;
-
     padding: 20px;
 
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 18px;
 
-    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
+    box-shadow: var(--shadow-card);
 
-    transition:
-        transform 0.15s ease,
-        box-shadow 0.2s ease,
-        border-color 0.2s ease;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .kc-card:hover {
-    border-color: #dbe2ea;
-    box-shadow: 0 8px 22px rgba(15, 23, 42, 0.07);
+    box-shadow: var(--shadow-pop);
 }
 
 /* Item heading */
 
 .kc-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
     min-width: 0;
     margin-bottom: 18px;
 }
 
-.kc-name {
-    color: #111827;
+.kc-top-text { min-width: 0; }
 
-    font-size: 18px;
+.kc-name {
+    color: var(--text);
+    font-size: 17px;
     line-height: 1.3;
     font-weight: 750;
-
     word-break: break-word;
 }
 
 .kc-recipe {
-    margin-top: 6px;
-
-    color: #9ca3af;
-
+    margin-top: 5px;
+    color: var(--muted);
     font-size: 12px;
     line-height: 1.45;
 }
@@ -749,20 +766,27 @@ table.data-table {
 
 .kc-group {
     min-width: 0;
-
     padding: 14px;
 
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
+    background: var(--minus);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--border);
     border-radius: 14px;
+
+    transition: border-color 0.15s ease;
 }
 
+.kc-group[data-order-type="dine_in"] { border-left-color: var(--primary); }
+.kc-group[data-order-type="takeout"] { border-left-color: var(--accent); }
+
 .kc-group-label {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 6px;
 
     margin-bottom: 10px;
 
-    color: #6b7280;
+    color: var(--muted);
 
     font-size: 11px;
     font-weight: 750;
@@ -770,7 +794,9 @@ table.data-table {
     text-transform: uppercase;
 }
 
-/* Counter controls */
+.kc-group-label svg { flex-shrink: 0; opacity: 0.85; }
+
+/* Counter controls (override the base .count-button sizing for this grid) */
 
 .kc-controls {
     display: grid;
@@ -779,66 +805,19 @@ table.data-table {
     gap: 6px;
 }
 
-.count-button {
+.kc-controls .count-button {
     width: 42px;
     height: 42px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border: 0;
-    border-radius: 11px;
-
     font-size: 22px;
     font-weight: 500;
-    line-height: 1;
-
-    cursor: pointer;
-
-    transition:
-        transform 0.08s ease,
-        background 0.15s ease,
-        opacity 0.15s ease;
+    border-radius: 11px;
 }
 
-.count-button:active {
-    transform: scale(0.92);
-}
+.kc-controls .count-button:disabled { cursor: wait; }
 
-.count-button:disabled {
-    cursor: wait;
-    opacity: 0.45;
-}
-
-.minus-button {
-    color: #374151;
-    background: #e5e7eb;
-}
-
-.minus-button:hover {
-    background: #d1d5db;
-}
-
-.plus-button {
-    color: #ffffff;
-    background: #2563eb;
-}
-
-.plus-button:hover {
-    background: #1d4ed8;
-}
-
-.count {
+.kc-controls .count {
     min-width: 42px;
-
-    text-align: center;
-
-    color: #111827;
-
     font-size: 24px;
-    line-height: 1;
-    font-weight: 800;
 }
 
 /* Total orders */
@@ -851,12 +830,11 @@ table.data-table {
     margin-top: 14px;
     padding-top: 13px;
 
-    border-top: 1px solid #f0f1f3;
+    border-top: 1px solid var(--border);
 }
 
 .kc-total-label {
-    color: #9ca3af;
-
+    color: var(--muted);
     font-size: 11px;
     font-weight: 700;
     text-transform: uppercase;
@@ -864,30 +842,24 @@ table.data-table {
 }
 
 .kc-total-value {
-    color: #374151;
-
+    color: var(--text);
     font-size: 14px;
     font-weight: 800;
 }
 
 /* Saving state */
 
-.kc-card.is-saving {
-    border-color: #bfdbfe;
-}
+.kc-card.is-saving { border-color: var(--primary); }
 
 .kc-card.is-saving::after {
     content: "Saving...";
-
     position: absolute;
     top: 12px;
     right: 14px;
-
     padding: 4px 8px;
 
-    color: #1d4ed8;
-    background: #eff6ff;
-
+    color: var(--primary);
+    background: var(--primary-soft);
     border-radius: 6px;
 
     font-size: 10px;
@@ -898,76 +870,64 @@ table.data-table {
 
 .kitchen-empty {
     padding: 50px 24px;
-
     text-align: center;
 
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
+    background: var(--card);
+    border: 1px solid var(--border);
     border-radius: 18px;
 
-    box-shadow: 0 3px 10px rgba(15, 23, 42, 0.04);
+    box-shadow: var(--shadow-card);
 }
 
 .kitchen-empty-icon {
     width: 70px;
     height: 70px;
-
     margin: 0 auto 18px;
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    color: #2563eb;
-    background: #eff6ff;
+    color: var(--primary);
+    background: var(--primary-soft);
 
     border-radius: 18px;
 }
 
 .kitchen-empty h2 {
     margin: 0 0 7px;
-
-    color: #111827;
-
+    color: var(--text);
     font-size: 19px;
 }
 
 .kitchen-empty p {
     max-width: 450px;
     margin: 0 auto;
-
-    color: #6b7280;
-
+    color: var(--muted);
     font-size: 13px;
     line-height: 1.6;
 }
 
 .kitchen-empty a {
-    color: #2563eb;
+    color: var(--primary);
     font-weight: 700;
     text-decoration: none;
 }
 
-.kitchen-empty a:hover {
-    text-decoration: underline;
-}
+.kitchen-empty a:hover { text-decoration: underline; }
 
-/* Toast notification */
+/* Toast notification (always dark — floats above either theme) */
 
 .kc-toast {
     position: fixed;
     z-index: 9999;
-
     left: 50%;
     bottom: 24px;
-
     transform: translate(-50%, 20px);
 
     padding: 11px 16px;
-
     color: #ffffff;
     background: #111827;
-
     border-radius: 10px;
 
     font-size: 13px;
@@ -976,31 +936,19 @@ table.data-table {
     opacity: 0;
     pointer-events: none;
 
-    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.20);
-
-    transition:
-        opacity 0.2s ease,
-        transform 0.2s ease;
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.35);
+    transition: opacity 0.2s ease, transform 0.2s ease;
 }
 
-.kc-toast.show {
-    opacity: 1;
-    transform: translate(-50%, 0);
-}
-
-.kc-toast.error {
-    background: #dc2626;
-}
+.kc-toast.show { opacity: 1; transform: translate(-50%, 0); }
+.kc-toast.error { background: var(--danger-dark); }
 
 /* =========================================================
    TABLET
 ========================================================= */
 
 @media (max-width: 850px) {
-
-    .kc-list {
-        grid-template-columns: 1fr;
-    }
+    .kc-list { grid-template-columns: 1fr; }
 }
 
 /* =========================================================
@@ -1008,78 +956,21 @@ table.data-table {
 ========================================================= */
 
 @media (max-width: 560px) {
-
-    .kitchen-shift-bar {
-        margin-bottom: 14px;
-        padding: 12px 14px;
-
-        font-size: 12px;
-    }
-
-    .kc-list {
-        gap: 12px;
-    }
-
-    .kc-card {
-        padding: 16px;
-        border-radius: 16px;
-    }
-
-    .kc-name {
-        font-size: 17px;
-    }
-
-    .kc-groups {
-        gap: 8px;
-    }
-
-    .kc-group {
-        padding: 11px 9px;
-        border-radius: 12px;
-    }
-
-    .kc-group-label {
-        margin-bottom: 8px;
-
-        font-size: 10px;
-        text-align: center;
-    }
-
-    .kc-controls {
-        grid-template-columns: 38px minmax(35px, 1fr) 38px;
-        gap: 4px;
-    }
-
-    .count-button {
-        width: 38px;
-        height: 42px;
-
-        border-radius: 10px;
-
-        font-size: 21px;
-    }
-
-    .count {
-        min-width: 35px;
-        font-size: 22px;
-    }
-
-    .kc-total {
-        margin-top: 11px;
-        padding-top: 10px;
-    }
-
-    .kc-total-label {
-        font-size: 10px;
-    }
-
-    .kc-total-value {
-        font-size: 13px;
-    }
-
-    .kitchen-empty {
-        padding: 40px 20px;
-    }
+    .kitchen-shift-bar { margin-bottom: 12px; padding: 12px 14px; font-size: 12px; }
+    .kc-list { gap: 12px; }
+    .kc-card { padding: 16px; border-radius: 16px; }
+    .kc-name { font-size: 16px; }
+    .kc-groups { gap: 8px; }
+    .kc-group { padding: 11px 9px; }
+    .kc-group-label { margin-bottom: 8px; font-size: 10px; }
+    .kc-controls { grid-template-columns: 38px minmax(35px, 1fr) 38px; gap: 4px; }
+    .kc-controls .count-button { width: 38px; height: 42px; border-radius: 10px; font-size: 21px; }
+    .kc-controls .count { min-width: 35px; font-size: 22px; }
+    .kc-total { margin-top: 11px; padding-top: 10px; }
+    .kc-total-label { font-size: 10px; }
+    .kc-total-value { font-size: 13px; }
+    .kitchen-empty { padding: 40px 20px; }
+    .item-avatar { width: 34px; height: 34px; font-size: 13px; border-radius: 10px; }
 }
 
 /* =========================================================
@@ -1087,28 +978,156 @@ table.data-table {
 ========================================================= */
 
 @media (max-width: 360px) {
+    .kc-card { padding: 14px; }
+    .kc-groups { grid-template-columns: 1fr; }
+    .kc-group { padding: 10px; }
+    .kc-controls { grid-template-columns: 42px 1fr 42px; }
+    .kc-controls .count-button { width: 42px; }
+}
 
-    .kc-card {
-        padding: 14px;
+/* =========================================================
+   KITCHEN COUNT — ADDITIONS
+   Append this block to the end of your existing stylesheet.
+   (Sticky header, activity split bar, dimmed zero-count cards,
+   and the undo toast button.)
+========================================================= */
+
+/* Sticky stats + search while scrolling the item list */
+
+.kc-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: var(--bg);
+    padding-top: 4px;
+    margin: 0 -4px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+
+/* Dine-in / takeout split bar */
+
+.kc-split-bar {
+    display: flex;
+    height: 6px;
+    margin: -6px 0 16px;
+    border-radius: 999px;
+    overflow: hidden;
+    background: var(--minus);
+}
+
+.kc-split-fill {
+    height: 100%;
+    transition: width 0.25s ease;
+}
+
+.kc-split-dinein { background: var(--primary); }
+.kc-split-takeout { background: var(--accent); }
+
+/* Dim cards that have no orders yet, so busy items stand out */
+
+.kc-card.kc-zero {
+    opacity: 0.55;
+}
+
+.kc-card.kc-zero:hover {
+    opacity: 1;
+}
+
+/* Toast layout update: message + inline undo button */
+
+.kc-toast {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.kc-toast-undo {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 5px 11px;
+    border-radius: 7px;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background 0.15s;
+}
+
+.kc-toast-undo:hover { background: rgba(255, 255, 255, 0.25); }
+.kc-toast-undo:disabled { opacity: 0.5; cursor: not-allowed; }
+
+@media (max-width: 560px) {
+    .kc-split-bar { margin: -4px 0 12px; }
+}
+
+/* =========================================================
+   KITCHEN COUNT — STATS BAR
+========================================================= */
+
+.stats-bar {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.stat-chip {
+    min-width: 0;
+    padding: 14px 16px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow-card);
+    text-align: center;
+}
+
+.stat-chip.accent {
+    border-top: 3px solid var(--primary);
+}
+
+.stat-chip-value {
+    color: var(--text);
+    font-size: 24px;
+    line-height: 1.1;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+}
+
+.stat-chip-label {
+    margin-top: 5px;
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* Takeout / Delivery gets the orange accent */
+.stat-chip:nth-child(2).accent {
+    border-top-color: var(--accent);
+}
+
+/* Mobile */
+@media (max-width: 560px) {
+    .stats-bar {
+        gap: 8px;
     }
 
-    .kc-groups {
-        grid-template-columns: 1fr;
+    .stat-chip {
+        padding: 12px 8px;
+        border-radius: 12px;
     }
 
-    .kc-group {
-        padding: 10px;
+    .stat-chip-value {
+        font-size: 20px;
     }
 
-    .kc-group-label {
-        text-align: left;
-    }
-
-    .kc-controls {
-        grid-template-columns: 42px 1fr 42px;
-    }
-
-    .count-button {
-        width: 42px;
+    .stat-chip-label {
+        font-size: 9px;
     }
 }
